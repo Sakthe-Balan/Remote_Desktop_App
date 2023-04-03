@@ -37,3 +37,4 @@ pip install pyautogui
 2. <h3><b>The touchpad takes my complete screen, but it still does not access the clients complete screen</b></h3>Try changing the '2' of line 40 in server.py to a higher number, such as 3 or 4.
 
 In the case that you found any other bugs in the code, create an issue or send an email to [vismaya.atreya@outlook.com](mailto:vismaya.atreya@outlook.com) and I will fix it as soon as possible.
+Louda
