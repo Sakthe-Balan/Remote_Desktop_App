@@ -8,10 +8,7 @@ Aren't you tired of intructing a person on a call to use their computer? This pr
 * Two or more computers running Windows / macOS / Linux
 * All computers need to be connected to the same network
 
-## Run on Repl.it
 
-* [Server Script](https://repl.it/@vismodo/Remote-Desktop-Server)
-* [Client Script](https://repl.it/@vismodo/Remote-Desktop-Client)
 ## Usage
 
 * We first need to install the [`pyautogui`](https://pyautogui.readthedocs.io/en/latest/) module to control the cursor and keyboard. Launch <b>Command Prompt</b> or <b>Terminal</b> and type the following:
@@ -31,9 +28,7 @@ pip install pyautogui
 
 * To type text, click on the <b>'Text'</b> button from the menu of the touchpad. This should bring up a window. Use the text field to enter your text, and click on the <b>'Type Text'</b> button to type the text on the clients, <b>'Delete'</b> for 'backspace' and <b>'Enter'</b> for a new line.
 
-## Authors
 
-[vismodo](https://github.com/vismodo) : [vismaya.atreya@outlook.com](mailto:vismaya.atreya@outlook.com)
 
 ## Troubleshooting
 
