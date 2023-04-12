@@ -1,43 +1,53 @@
-#!/usr/bin/env python
-# Client.py of 'Remote Desktop'
-
-import pyautogui as pg
 import socket
+import cv2
+import numpy as np
+import io
+import threading
+from tkinter import *
+from PIL import Image, ImageTk
 
-host = input('Host: ')  # as both code is running on same pc
-port = int(input('Port: '))  # socket server port number
+# Set up the client socket
+client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+client_socket.connect(('localhost', 5000))
 
-client_socket = socket.socket()  # instantiate
-client_socket.connect((host, port))  # connect to the server
+# Create a Tkinter window to display the screenshot
+root = Tk()
+screenshot_label = Label(root)
+screenshot_label.pack()
 
-message = 'done'
-while True:
-    try:
-        while message.lower().strip() != 'bye':
-            client_socket.send(message.encode())  # send message
-            data = client_socket.recv(1024).decode()  # receive response
-            if data == 'click':
-                pg.click(x, y)
-            elif data == 'del':
-                pg.typewrite(['backspace'])
-            elif data.startswith('cde:'):
-                pg.write(data.replace('cde:', ''))
-            elif data=='rclick':
-                pg.click(button='right')
-            elif data=='dclick':
-                pg.click(clicks=2)
-            elif data=='nl':
-                pg.typewrite(['enter'])
-            else:
-                x = int(data.split(' ')[0])
-                y = int(data.split(' ')[1])
-                pg.moveTo(x, y)  # show in terminal
-            message = 'done' # again take input
+# Function to receive and display screenshot
+def receive_screenshot():
+    while True:
+        # Receive the size of the byte string from the server
+        size_bytes = client_socket.recv(8)
 
-        client_socket.close()  # close the connection
-    except:
-        pass
-# Created by vismodo: https://github.com/vismodo/
-# Email: vismaya.atreya@outlook.com
-# Repository: https://github.com/vismodo/Remote-Desktop (Remote Desktop)
-# Python Version: 3.9
+        # Convert the size to an integer
+        buffer_size = int.from_bytes(size_bytes, byteorder='big')
+
+        # Receive the byte string from the server
+        screenshot_bytes = b''
+        while len(screenshot_bytes) < buffer_size:
+            remaining = buffer_size - len(screenshot_bytes)
+            screenshot_bytes += client_socket.recv(1024 if remaining > 1024 else remaining)
+
+        # Convert the byte string to an image
+        screenshot = cv2.imdecode(np.frombuffer(screenshot_bytes, dtype=np.uint8), cv2.IMREAD_COLOR)
+
+        # Convert the image to a format that Tkinter can display
+        screenshot = cv2.cvtColor(screenshot, cv2.COLOR_BGR2RGB)
+        screenshot = Image.fromarray(screenshot)
+        screenshot = ImageTk.PhotoImage(screenshot)
+
+        # Update the screenshot label in the Tkinter window
+        screenshot_label.configure(image=screenshot)
+        screenshot_label.image = screenshot
+
+    # Close the client socket
+    client_socket.close()
+
+# Create a thread to receive and display screenshots from the server
+receive_thread = threading.Thread(target=receive_screenshot)
+receive_thread.start()
+
+# Start the Tkinter main loop
+root.mainloop()
