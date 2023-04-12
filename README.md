@@ -1,40 +1,32 @@
-# Python Remote Desktop
+# Screen Sharing using Python
 
-Aren't you tired of intructing a person on a call to use their computer? This project gives you a virtual touchpad and a field to type in!
+A Python-based screen sharing application that allows users to share their screens across different devices. The application uses OpenCV and MSS libraries to capture and display screenshots.
 
-## Prerequisites
+## Requirements
 
-* Python 3 (I used Python 3.9.0)
-* Two or more computers running Windows / macOS / Linux
-* All computers need to be connected to the same network
+* Python 3.x
+* OpenCV
+* MSS
 
+## Installation
+
+1. Clone the repository: `git clone https://github.com/your-username/screen-sharing.git`
+2. Install the required packages: `pip install -r requirements.txt`
 
 ## Usage
 
-* We first need to install the [`pyautogui`](https://pyautogui.readthedocs.io/en/latest/) module to control the cursor and keyboard. Launch <b>Command Prompt</b> or <b>Terminal</b> and type the following:
+1. Run the server on the device that you want to share the screen from: `python server.py`
+2. Run the client on the device that you want to view the shared screen on: `python client.py <server-ip-address>`
+3. The shared screen will be displayed on the client device in real-time.
 
-```
-pip install pyautogui
-```
+## License
 
-* You now need to download [`server.py`](https://github.com/vismodo/Remote-Desktop/blob/main/server.py) onto one of the computers and [`client.py`](https://github.com/vismodo/Remote-Desktop/blob/main/client.py) to the rest.
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
 
-* Now run [`server.py`](https://github.com/vismodo/Remote-Desktop/blob/main/server.py) on and note the IP address as well as the port that comes as an alert.
+## Acknowledgments
 
-* On the other computers, run [`client.py`](https://github.com/vismodo/Remote-Desktop/blob/main/client.py). When it asks for the <b>Host IP Address and the Port</b>, type the details that you saw in the alert.
+* [OpenCV](https://opencv.org/)
+* [MSS](https://github.com/BoboTiG/python-mss)
+* [Python Socket Programming Tutorial](https://realpython.com/python-sockets/)
 
-* On the computer running [`server.py`](https://github.com/vismodo/Remote-Desktop/blob/main/server.py), you should now see a tkinter window. This window is your virtual touchpad. Click inside the window, and as your cursor moves inside that window, the cursor will move simultaniosly on the client computers!
-* You can adjust the window so that the touchpad can reach each end of the client computer. You can use <b>Control + l</b> for left click, <b>Control + r</b> for right click and <b>Control + d</b> for double click. I am working on adding dragging functionality to the touchpad too!
-
-* To type text, click on the <b>'Text'</b> button from the menu of the touchpad. This should bring up a window. Use the text field to enter your text, and click on the <b>'Type Text'</b> button to type the text on the clients, <b>'Delete'</b> for 'backspace' and <b>'Enter'</b> for a new line.
-
-
-
-## Troubleshooting
-
-1. <h3><b>Lag in the movement of the cursor</b></h3>This happens only if your network connection is unstable or slow.
-
-2. <h3><b>The touchpad takes my complete screen, but it still does not access the clients complete screen</b></h3>Try changing the '2' of line 40 in server.py to a higher number, such as 3 or 4.
-
-In the case that you found any other bugs in the code, create an issue or send an email to [vismaya.atreya@outlook.com](mailto:vismaya.atreya@outlook.com) and I will fix it as soon as possible.
-Louda
+Feel free to contribute to the project or report any issues you encounter.
