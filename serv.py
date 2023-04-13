@@ -4,6 +4,7 @@ import numpy as np
 import mss
 import threading
 import time
+import pyautogui
 
 
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -39,6 +40,27 @@ def handle_client(client_socket):
     
     send_thread = threading.Thread(target=send_screenshot, args=(client_socket,))
     send_thread.start()
+
+    while True:
+        try:
+            data = client_socket.recv(1024)
+            if not data:
+                break
+
+            data_str = data.decode('utf-8')
+            if data_str.startswith('move'):
+                parts = data_str.split(' ')
+                x, y = map(int, parts[1:])
+                pyautogui.moveTo(x, y)
+
+            elif data_str.startswith('click'):
+                parts = data_str.split(' ')
+                x, y, button = map(int, parts[1:])
+                pyautogui.click(x, y, button=button)
+        except Exception as e:
+            print('Exception while handling client input:', e)
+
+    client_socket.close()
 
 
 while True:

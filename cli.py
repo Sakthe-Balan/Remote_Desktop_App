@@ -8,7 +8,7 @@ from PIL import Image, ImageTk
 
 
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-ip_address ="192.168.151.158"
+ip_address ="192.168.56.1"
 server_address = (ip_address, 5000)  
 client_socket.connect(server_address)
 
@@ -16,6 +16,27 @@ client_socket.connect(server_address)
 root = Tk()
 screenshot_label = Label(root)
 screenshot_label.pack()
+
+# create a small window to track mouse movements and clicks
+mouse_window = Toplevel()
+mouse_window.geometry('50x50')
+mouse_window.protocol("WM_DELETE_WINDOW", lambda: None) # disable closing the window
+
+# track mouse movements and send them to the server
+def send_mouse_position(event):
+    x, y = event.x, event.y
+    mouse_position = f'mouse_position:{x},{y}'
+    client_socket.sendall(mouse_position.encode())
+
+# track mouse clicks and send them to the server
+def send_mouse_click(event):
+    x, y = event.x, event.y
+    mouse_click = f'mouse_click:{x},{y},{event.num}'
+    client_socket.sendall(mouse_click.encode())
+
+# attach the mouse movement and click handlers to the mouse window
+mouse_window.bind('<Motion>', send_mouse_position)
+mouse_window.bind('<Button>', send_mouse_click)
 
 
 def receive_screenshot():
